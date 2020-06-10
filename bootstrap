@@ -2,6 +2,20 @@
 
 set -euo pipefail
 
+# oracle clienctインストール
+# TODO : libaioはどうやって導入すればいい？
+# yum -y install libaio
+mkdir /tmp/oracle
+unzip instantclient-basic-linux.x64-18.3.0.0.0dbru.zip -d /tmp/oracle
+unzip instantclient-sqlplus-linux.x64-18.3.0.0.0dbru.zip -d /tmp/oracle
+ln -s /tmp/oracle/instantclient_18_3 /tmp/oracle/instantclient
+ln -s /tmp/oracle/instantclient/libclntsh.so.18.3 /tmp/oracle/libclntsh.so
+export LD_LIBRARY_PATH=/tmp/oracle/instantclient
+export ORACLE_HOME=/tmp/oracle/instantclient
+export PATH=$PATH:$ORACLE_HOME
+sqlplus --help
+
+
 # Initialization - load function handler
 source $LAMBDA_TASK_ROOT/"$(echo $_HANDLER | cut -d. -f1).sh"
 
